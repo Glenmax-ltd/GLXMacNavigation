@@ -121,7 +121,7 @@ open class GLXMacNavigationController: NSViewController {
         
     }
     
-    func pushViewController(_ viewController:NSViewController, animated:Bool) {
+    open func pushViewController(_ viewController:NSViewController, animated:Bool) {
         if let currentViewController = self.topViewController {
             self.currentNavigationAction = .pushing
             if !self.childViewControllers.contains(viewController) {
@@ -154,7 +154,7 @@ open class GLXMacNavigationController: NSViewController {
         viewControllers.append(viewController)
     }
     
-    func popViewController(animated:Bool) {
+    open func popViewController(animated:Bool) {
         if viewControllers.count > 1 {
             self.currentNavigationAction = .popping
             let currentViewController = self.topViewController!
