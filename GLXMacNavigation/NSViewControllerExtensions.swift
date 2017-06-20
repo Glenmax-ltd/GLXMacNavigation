@@ -9,21 +9,22 @@
 import Foundation
 import Cocoa
 
-extension NSViewController {
+public extension NSViewController {
     
-    var hidesBottomBarWhenPushed: Bool {
+    public var hidesBottomBarWhenPushed: Bool {
         return true
     }
     
-    var toolbarItems:[GLXMacBarButtonItem]? {
+    public var toolbarItems:[GLXMacBarButtonItem]? {
         return nil
     }
     
-    var navigationItem:GLXMacNavigationItem? {
+    
+    public var navigationItem:GLXMacNavigationItem? {
         return nil
     }
     
-    var navigationController:GLXMacNavigationController? {
+    public var navigationController:GLXMacNavigationController? {
         if let parent = self.parent {
             if let navC = parent as? GLXMacNavigationController {
                 return navC
