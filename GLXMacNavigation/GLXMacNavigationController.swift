@@ -15,12 +15,6 @@ fileprivate enum GLXNavigationAction {
     case popping
 }
 
-public class GLXMacNavigationControllerSegue: NSStoryboardSegue {
-    override public func perform() {
-        assert(source is DrawerController, "DrawerSegue can only be used to define left/center/right controllers for a DrawerController")
-    }
-}
-
 open class GLXMacNavigationController: NSViewController {
     
     // MARK: Properties
