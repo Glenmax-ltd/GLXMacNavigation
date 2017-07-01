@@ -54,10 +54,7 @@ open class GLXMacToolbar:NSBox {
                 context.duration = 0
             }
             for item in items {
-                if let flex = item as? GLXMacBarButtonItemFlexibleSpace {
-                    
-                }
-                else {
+                if !(item is GLXMacBarButtonItemFlexibleSpace) {
                     item.animator().alphaValue = 1.0
                 }
             }
