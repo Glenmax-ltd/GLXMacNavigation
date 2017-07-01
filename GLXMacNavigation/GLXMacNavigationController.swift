@@ -22,6 +22,12 @@ open class GLXMacNavigationController: NSViewController {
     /// Returns the navigation bar of the view controller
     open lazy var navigationBar:GLXMacNavigationBar = {
         let view = GLXMacNavigationBar()
+        view.titlePosition = .noTitle
+        view.boxType = .custom
+        view.borderType = .noBorder
+        view.cornerRadius = 0.0
+        view.borderWidth = 0.0
+        view.fillColor = NSColor.red
         view.translatesAutoresizingMaskIntoConstraints = false
         self.navBarHeightConstraint = view.heightAnchor.constraint(equalToConstant: self.navigationBarHeight)
         self.navBarHeightConstraint?.isActive = true
@@ -42,11 +48,19 @@ open class GLXMacNavigationController: NSViewController {
     
     open lazy var toolbar:GLXMacToolbar = {
         let view = GLXMacToolbar()
+        view.titlePosition = .noTitle
+        view.boxType = .custom
+        view.borderType = .noBorder
+        view.cornerRadius = 0.0
+        view.borderWidth = 0.0
+        view.fillColor = NSColor.red
         view.translatesAutoresizingMaskIntoConstraints = false
         self.toolbarHeightConstraint = view.heightAnchor.constraint(equalToConstant: self.toolbarHeight)
         self.toolbarHeightConstraint?.isActive = true
         return view
     }()
+    
+    open var toolbarItems:[[GLXMacBarButtonItem]] = []
     
     fileprivate var toolbarHeightConstraint: NSLayoutConstraint?
     
@@ -95,6 +109,10 @@ open class GLXMacNavigationController: NSViewController {
     }
     
     func addViewController(_ viewController:NSViewController) {
+        let item = GLXMacNavigationItem(navController: self)
+        self.navigationBar.pushItem(item, animated: true)
+        self.toolbarItems.append([])
+        viewControllers.append(viewController)
         self.addChildViewController(viewController)
         self.view.addSubview(viewController.view)
         viewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -133,7 +151,7 @@ open class GLXMacNavigationController: NSViewController {
             previousConstraints.constant = 0
             NSAnimationContext.runAnimationGroup({ (context) in
                 if animated {
-                    context.duration = 0.25
+                    context.duration = 0.5
                 }
                 else {
                     context.duration = 0
@@ -151,7 +169,6 @@ open class GLXMacNavigationController: NSViewController {
         else {
             self.addViewController(viewController)
         }
-        viewControllers.append(viewController)
     }
     
     open func popViewController(animated:Bool) {
@@ -169,7 +186,7 @@ open class GLXMacNavigationController: NSViewController {
             previousConstraints.constant = -self.view.frame.size.width/3
             NSAnimationContext.runAnimationGroup({ (context) in
                 if animated {
-                    context.duration = 0.25
+                    context.duration = 0.5
                 }
                 else {
                     context.duration = 0
@@ -186,6 +203,24 @@ open class GLXMacNavigationController: NSViewController {
             })
             viewControllers.removeLast()
             navigationConstraints.removeLast()
+            self.toolbarItems.removeLast()
+            self.navigationBar.popItem(self.navigationBar.topItem!, animated: true)
+        }
+    }
+    
+    func navigationItem(forController controller:NSViewController) ->GLXMacNavigationItem? {
+        if let index = viewControllers.index(of: controller) {
+            return self.navigationBar.items[index]
+        }
+        return nil
+    }
+    
+    func setToolbarItems(_ items:[GLXMacBarButtonItem], forController controller:NSViewController, animated:Bool) {
+        if let index = viewControllers.index(of: controller) {
+            self.toolbarItems[index] = items
+            if index == viewControllers.count - 1 {
+                self.toolbar.setItems(items, animated: animated)
+            }
         }
     }
 

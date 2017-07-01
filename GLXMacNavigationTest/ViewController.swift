@@ -14,7 +14,12 @@ class ViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationItem?.leftBarButtonItem = GLXMacBarButtonItem(title: String(describing: self.navigationController!.viewControllers.count), target: nil, selector: nil)
+        self.navigationItem?.leftBarButtonItem?.tintColor = NSColor.white
+        self.navigationItem?.rightBarButtonItem = GLXMacBarButtonItem(image: NSImage(named:"cancelCross")!, target: nil, selector: nil)
+        self.navigationItem?.rightBarButtonItem?.tintColor = NSColor.white
+        
+        self.setToolbarItems([GLXMacBarButtonItemFlexibleSpace(),GLXMacBarButtonItem(image: NSImage(named:"cancelCross")!, target: nil, selector: nil),GLXMacBarButtonItemFlexibleSpace(),GLXMacBarButtonItem(title: String(describing: self.navigationController!.viewControllers.count), target: nil, selector: nil),GLXMacBarButtonItemFlexibleSpace()], animated: true)
         // Do any additional setup after loading the view.
         label.stringValue = "View controller in the stack\n\n\(String(describing: self.navigationController!.viewControllers.count))"
     }

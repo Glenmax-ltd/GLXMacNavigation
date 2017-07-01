@@ -15,13 +15,8 @@ public extension NSViewController {
         return true
     }
     
-    public var toolbarItems:[GLXMacBarButtonItem]? {
-        return nil
-    }
-    
-    
     public var navigationItem:GLXMacNavigationItem? {
-        return nil
+        return navigationController?.navigationItem(forController: self)
     }
     
     public var navigationController:GLXMacNavigationController? {
@@ -34,6 +29,10 @@ public extension NSViewController {
             }
         }
         return nil
+    }
+    
+    public func setToolbarItems(_ items:[GLXMacBarButtonItem], animated:Bool) {
+        self.navigationController?.setToolbarItems(items, forController: self, animated: animated)
     }
     
 }

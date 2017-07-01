@@ -7,11 +7,27 @@
 //
 
 import Foundation
+import Cocoa
 
-open class GLXMacNavigationItem {
+open class GLXMacNavigationItem:NSObject {
     
-    open var leftBarButtonItem:GLXMacBarButtonItem?
+    weak var navigationController:GLXMacNavigationController?
     
-    open var rightBarButtonItem:GLXMacBarButtonItem?
+    open var leftBarButtonItem:GLXMacBarButtonItem? {
+        didSet {
+            navigationController?.navigationBar.updateLeftItem(forItem: self)
+        }
+    }
+    
+    open var rightBarButtonItem:GLXMacBarButtonItem? {
+        didSet {
+            navigationController?.navigationBar.updateRightItem(forItem: self)
+        }
+    }
+    
+    init(navController:GLXMacNavigationController) {
+        navigationController = navController
+        super.init()
+    }
     
 }
