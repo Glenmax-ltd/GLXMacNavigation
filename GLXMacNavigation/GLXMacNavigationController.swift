@@ -28,9 +28,12 @@ open class GLXMacNavigationController: NSViewController {
         view.cornerRadius = 0.0
         view.borderWidth = 0.0
         view.fillColor = NSColor.red
+        view.title = ""
+        view.contentViewMargins = NSMakeSize(0,0)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.navBarHeightConstraint = view.heightAnchor.constraint(equalToConstant: self.navigationBarHeight)
         self.navBarHeightConstraint?.isActive = true
+        self.navBarHeightConstraint?.priority = 1000
         return view
     }()
     
@@ -38,7 +41,7 @@ open class GLXMacNavigationController: NSViewController {
     fileprivate var navBarHeightConstraint: NSLayoutConstraint?
     
     /// Height of the navigation bar
-    open var navigationBarHeight:CGFloat = 60.0 {
+    open var navigationBarHeight:CGFloat = 0.0 {
         didSet {
             self.navBarHeightConstraint?.constant = navigationBarHeight
         }
@@ -54,6 +57,8 @@ open class GLXMacNavigationController: NSViewController {
         view.cornerRadius = 0.0
         view.borderWidth = 0.0
         view.fillColor = NSColor.red
+        view.title = ""
+        view.contentViewMargins = NSMakeSize(0,0)
         view.translatesAutoresizingMaskIntoConstraints = false
         self.toolbarHeightConstraint = view.heightAnchor.constraint(equalToConstant: self.toolbarHeight)
         self.toolbarHeightConstraint?.isActive = true
@@ -64,7 +69,7 @@ open class GLXMacNavigationController: NSViewController {
     
     fileprivate var toolbarHeightConstraint: NSLayoutConstraint?
     
-    open var toolbarHeight:CGFloat = 60.0 {
+    open var toolbarHeight:CGFloat = 0.0 {
         didSet {
             self.toolbarHeightConstraint?.constant = toolbarHeight
         }
@@ -98,6 +103,7 @@ open class GLXMacNavigationController: NSViewController {
         super.viewDidLoad()
         self.view.addSubview(navigationBar)
         self.view.addSubview(toolbar)
+        print("margins \(self.navigationBar.contentViewMargins)")
         navigationBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
         navigationBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
         navigationBar.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
@@ -120,6 +126,7 @@ open class GLXMacNavigationController: NSViewController {
     }
     
     func setupConstraintsForChildViewController(_ viewController:NSViewController) ->NSLayoutConstraint {
+        viewController.view.translatesAutoresizingMaskIntoConstraints = false
         viewController.view.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
         viewController.view.bottomAnchor.constraint(equalTo: toolbar.topAnchor).isActive = true
         let leading = viewController.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
@@ -156,6 +163,18 @@ open class GLXMacNavigationController: NSViewController {
                 else {
                     context.duration = 0
                 }
+                if viewController.hidesTopBarWhenPushed {
+                    self.navBarHeightConstraint?.animator().constant = 0
+                }
+                else {
+                    self.navBarHeightConstraint?.animator().constant = 44
+                }
+                if viewController.hidesBottomBarWhenPushed {
+                    self.toolbarHeightConstraint?.animator().constant = 0
+                }
+                else {
+                    self.toolbarHeightConstraint?.animator().constant = 44
+                }
                 constraints.animator().constant = 0
                 previousConstraints.animator().constant = -self.view.frame.size.width/3
             }, completionHandler: {
@@ -190,6 +209,18 @@ open class GLXMacNavigationController: NSViewController {
                 }
                 else {
                     context.duration = 0
+                }
+                if viewController.hidesTopBarWhenPushed {
+                    self.navBarHeightConstraint?.animator().constant = 0
+                }
+                else {
+                    self.navBarHeightConstraint?.animator().constant = 44
+                }
+                if viewController.hidesBottomBarWhenPushed {
+                    self.toolbarHeightConstraint?.animator().constant = 0
+                }
+                else {
+                    self.toolbarHeightConstraint?.animator().constant = 44
                 }
                 previousConstraints.animator().constant = 0
                 //viewController.view.animator().constant = 0

@@ -16,7 +16,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
         if let nav = NSApplication.shared().windows[0].contentViewController as? GLXMacNavigationController {
-            print("windows \(NSApplication.shared().windows)")
             nav.pushViewController(NSStoryboard(name: "Main", bundle: nil).instantiateController(withIdentifier: "ViewController") as! ViewController, animated: false)
         }
     }
