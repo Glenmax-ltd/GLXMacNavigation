@@ -24,6 +24,8 @@
 		42A7B6341EF965640071F109 /* GLXMacNavigationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A3DF31EBF5518004A6579 /* GLXMacNavigationItem.swift */; };
 		42A7B6351EF965670071F109 /* GLXMacBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A3DF51EBF5526004A6579 /* GLXMacBarButtonItem.swift */; };
 		42A7B6361EF9656C0071F109 /* NSViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427A3DFB1EBF5A65004A6579 /* NSViewControllerExtensions.swift */; };
+		42BDF2F91F0823DE00FEA45E /* FlatButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BDF2F81F0823DE00FEA45E /* FlatButton.swift */; };
+		42BDF2FA1F0823DE00FEA45E /* FlatButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BDF2F81F0823DE00FEA45E /* FlatButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,6 +65,7 @@
 		427A3DF51EBF5526004A6579 /* GLXMacBarButtonItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLXMacBarButtonItem.swift; sourceTree = "<group>"; };
 		427A3DF71EBF5536004A6579 /* GLXMacNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GLXMacNavigationBar.swift; sourceTree = "<group>"; };
 		427A3DFB1EBF5A65004A6579 /* NSViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSViewControllerExtensions.swift; sourceTree = "<group>"; };
+		42BDF2F81F0823DE00FEA45E /* FlatButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlatButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +127,7 @@
 				427A3DF51EBF5526004A6579 /* GLXMacBarButtonItem.swift */,
 				427A3DF71EBF5536004A6579 /* GLXMacNavigationBar.swift */,
 				427A3DFB1EBF5A65004A6579 /* NSViewControllerExtensions.swift */,
+				42BDF2F81F0823DE00FEA45E /* FlatButton.swift */,
 			);
 			path = GLXMacNavigation;
 			sourceTree = "<group>";
@@ -261,6 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				42BDF2FA1F0823DE00FEA45E /* FlatButton.swift in Sources */,
 				42A7B6331EF965620071F109 /* GLXMacToolbar.swift in Sources */,
 				42A7B6311EF9655C0071F109 /* GLXMacNavigationBar.swift in Sources */,
 				42A7B6341EF965640071F109 /* GLXMacNavigationItem.swift in Sources */,
@@ -280,6 +285,7 @@
 				427A3DEF1EBF52EE004A6579 /* GLXMacNavigationController.swift in Sources */,
 				427A3DF21EBF54F0004A6579 /* GLXMacToolbar.swift in Sources */,
 				427A3DF41EBF5518004A6579 /* GLXMacNavigationItem.swift in Sources */,
+				42BDF2F91F0823DE00FEA45E /* FlatButton.swift in Sources */,
 				427A3DF81EBF5536004A6579 /* GLXMacNavigationBar.swift in Sources */,
 				427A3DFC1EBF5A65004A6579 /* NSViewControllerExtensions.swift in Sources */,
 			);

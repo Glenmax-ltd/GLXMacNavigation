@@ -30,7 +30,7 @@ extension NSImage {
 open class GLXMacBarButtonItemFlexibleSpace:GLXMacBarButtonItem {
 }
 
-open class GLXMacBarButtonItem:NSButton {
+open class GLXMacBarButtonItem:FlatButton {
     
     open var tintColor:NSColor? {
         didSet {
@@ -45,7 +45,7 @@ open class GLXMacBarButtonItem:NSButton {
         self.title = title
         isBordered = false
         font = NSFont.systemFont(ofSize: 17.0)
-        alignment = .center
+        //alignment = .center
         translatesAutoresizingMaskIntoConstraints = false
         self.updateTint()
     }
@@ -58,29 +58,25 @@ open class GLXMacBarButtonItem:NSButton {
         self.title = ""
         isBordered = false
         font = NSFont.systemFont(ofSize: 17.0)
-        alignment = .center
+        //alignment = .center
         translatesAutoresizingMaskIntoConstraints = false
         self.updateTint()
     }
     
     func updateTint() {
-        if let image = self.image {
-            self.image = image.tinted(color: tintColor)
-        }
+        buttonColor = NSColor.clear
+        momentary = true
+        activeButtonColor = NSColor.clear
+        borderColor = NSColor.clear
+        activeBorderColor = NSColor.clear
+        
         if let textColor = tintColor
         {
-            let style = NSMutableParagraphStyle()
-            style.alignment = .center
+            self.iconColor = textColor
+            self.textColor = textColor
             
-            let attributes =
-                [
-                    NSForegroundColorAttributeName: textColor,
-                    NSFontAttributeName: NSFont.systemFont(ofSize: 17.0),
-                    NSParagraphStyleAttributeName: style
-                    ] as [String : Any]
-            
-            let attributedTitle = NSAttributedString(string: title, attributes: attributes)
-            self.attributedTitle = attributedTitle
+            self.activeIconColor = textColor.withAlphaComponent(0.5)
+            self.activeTextColor = textColor.withAlphaComponent(0.5)
         }
     }
 }
