@@ -9,13 +9,13 @@
 import Foundation
 import Cocoa
 
-public extension NSViewController {
+extension NSViewController {
     
-    public var navigationItem:GLXMacNavigationItem? {
+    var navigationItem:GLXMacNavigationItem? {
         return navigationController?.navigationItem(forController: self)
     }
     
-    public var navigationController:GLXMacNavigationController? {
+    var navigationController:GLXMacNavigationController? {
         if let parent = self.parent {
             if let navC = parent as? GLXMacNavigationController {
                 return navC
@@ -27,11 +27,11 @@ public extension NSViewController {
         return nil
     }
     
-    public func setToolbarItems(_ items:[GLXMacBarButtonItem], animated:Bool) {
+    func setToolbarItems(_ items:[GLXMacBarButtonItem], animated:Bool) {
         self.navigationController?.setToolbarItems(items, forController: self, animated: animated)
     }
     
-    open var hidesBottomBarWhenPushed:Bool {
+    var hidesBottomBarWhenPushed:Bool {
         return true
     }
     
