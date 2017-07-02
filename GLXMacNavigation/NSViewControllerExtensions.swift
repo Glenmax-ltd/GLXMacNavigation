@@ -11,11 +11,11 @@ import Cocoa
 
 extension NSViewController {
     
-    var navigationItem:GLXMacNavigationItem? {
+    open var navigationItem:GLXMacNavigationItem? {
         return navigationController?.navigationItem(forController: self)
     }
     
-    var navigationController:GLXMacNavigationController? {
+    open var navigationController:GLXMacNavigationController? {
         if let parent = self.parent {
             if let navC = parent as? GLXMacNavigationController {
                 return navC
@@ -27,11 +27,11 @@ extension NSViewController {
         return nil
     }
     
-    func setToolbarItems(_ items:[GLXMacBarButtonItem], animated:Bool) {
+    open func setToolbarItems(_ items:[GLXMacBarButtonItem], animated:Bool) {
         self.navigationController?.setToolbarItems(items, forController: self, animated: animated)
     }
     
-    var hidesBottomBarWhenPushed:Bool {
+    open var hidesBottomBarWhenPushed:Bool {
         return true
     }
     
