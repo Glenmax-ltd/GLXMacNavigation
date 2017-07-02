@@ -31,11 +31,11 @@ public extension NSViewController {
         self.navigationController?.setToolbarItems(items, forController: self, animated: animated)
     }
     
-    public var hidesBottomBarWhenPushed:Bool {
+    open var hidesBottomBarWhenPushed:Bool {
         return true
     }
     
-    public var hidesTopBarWhenPushed:Bool {
+    open var hidesTopBarWhenPushed:Bool {
         return true
     }
     
