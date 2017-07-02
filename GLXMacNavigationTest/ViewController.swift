@@ -24,7 +24,9 @@ class ViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem?.leftBarButtonItem = GLXMacBarButtonItem(title: String(describing: self.navigationController!.viewControllers.count), target: nil, selector: nil)
+        let item = GLXMacBarButtonItem(title: "", target: nil, selector: nil)
+        item.isMenuOpeningButton = true
+        self.navigationItem?.leftBarButtonItem = item
         self.navigationItem?.leftBarButtonItem?.tintColor = NSColor.white
         self.navigationItem?.rightBarButtonItem = GLXMacBarButtonItem(image: NSImage(named:"cancelCross")!, target: nil, selector: nil)
         self.navigationItem?.rightBarButtonItem?.tintColor = NSColor.white

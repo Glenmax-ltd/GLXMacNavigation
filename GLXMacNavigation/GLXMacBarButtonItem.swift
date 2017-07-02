@@ -38,6 +38,21 @@ open class GLXMacBarButtonItem:FlatButton {
         }
     }
     
+    open var isOn = false {
+        didSet {
+            self.setNeedsDisplay()
+        }
+    }
+    
+    open var isMenuOpeningButton = false {
+        didSet {
+            if isMenuOpeningButton {
+                self.widthAnchor.constraint(equalToConstant: 26).isActive = true
+                self.heightAnchor.constraint(equalToConstant: 26).isActive = true
+            }
+        }
+    }
+    
     public convenience init(title:String,target:AnyObject?,selector:Selector?) {
         self.init(frame: NSRect.zero)
         self.target = target
@@ -78,5 +93,48 @@ open class GLXMacBarButtonItem:FlatButton {
             self.activeIconColor = textColor.withAlphaComponent(0.5)
             self.activeTextColor = textColor.withAlphaComponent(0.5)
         }
+    }
+    
+    override open func draw(_ dirtyRect: NSRect) {
+        if !isMenuOpeningButton {
+            return
+        }
+        var color:NSColor
+        
+        if let tint = tintColor {
+            color = tint
+        }
+        else {
+            color = NSColor.white
+        }
+        
+        if self.isOn {
+            color = color.withAlphaComponent(0.5)
+        }
+        
+        color.setStroke()
+        
+        let context = NSGraphicsContext.current()
+        context?.shouldAntialias = false
+        
+        let top = NSBezierPath()
+        top.move(to: CGPoint(x:3,y:6.5))
+        top.line(to: CGPoint(x:23,y:6.5))
+        top.stroke()
+        
+        let middle = NSBezierPath()
+        middle.move(to: CGPoint(x:3,y:12.5))
+        middle.line(to: CGPoint(x:23,y:12.5))
+        middle.stroke()
+        
+        let bottom = NSBezierPath()
+        bottom.move(to: CGPoint(x:3,y:18.5))
+        bottom.line(to: CGPoint(x:23,y:18.5))
+        bottom.stroke()
+    }
+    
+    public override func animateColor(_ isOn: Bool) {
+        super.animateColor(isOn)
+        self.isOn = isOn
     }
 }
