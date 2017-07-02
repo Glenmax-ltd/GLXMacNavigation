@@ -12,12 +12,14 @@ class ViewController: NSViewController {
     
     @IBOutlet var label:NSTextField!
     
+    var hide = (arc4random() % 2) == 0
+    
     override var hidesBottomBarWhenPushed:Bool {
-        return (arc4random() % 2) == 0
+        return hide
     }
     
     override var hidesTopBarWhenPushed:Bool {
-        return (arc4random() % 2) == 0
+        return hide
     }
 
     override func viewDidLoad() {

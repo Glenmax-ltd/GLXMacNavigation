@@ -39,11 +39,19 @@ open class GLXMacNavigationController: NSViewController {
     
     /// Height constraint for navigation bar
     fileprivate var navBarHeightConstraint: NSLayoutConstraint?
+    fileprivate lazy var navBarLeadingConstraint: NSLayoutConstraint = {
+        return self.navigationBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
+    }()
     
     /// Height of the navigation bar
-    open var navigationBarHeight:CGFloat = 0.0 {
+    open var navigationBarHeight:CGFloat = 44.0 {
         didSet {
-            self.navBarHeightConstraint?.constant = navigationBarHeight
+            if let contr = self.topViewController {
+                if !contr.hidesTopBarWhenPushed  {
+                    self.navBarHeightConstraint?.constant = navigationBarHeight
+                }
+                
+            }
         }
     }
     
@@ -68,10 +76,18 @@ open class GLXMacNavigationController: NSViewController {
     open var toolbarItems:[[GLXMacBarButtonItem]] = []
     
     fileprivate var toolbarHeightConstraint: NSLayoutConstraint?
+    fileprivate lazy var toolbarLeadingConstraint: NSLayoutConstraint = {
+        return self.toolbar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
+    }()
     
-    open var toolbarHeight:CGFloat = 0.0 {
+    open var toolbarHeight:CGFloat = 44.0 {
         didSet {
-            self.toolbarHeightConstraint?.constant = toolbarHeight
+            if let contr = self.topViewController {
+                if !contr.hidesBottomBarWhenPushed  {
+                    self.toolbarHeightConstraint?.constant = navigationBarHeight
+                }
+                
+            }
         }
     }
     
@@ -103,13 +119,12 @@ open class GLXMacNavigationController: NSViewController {
         super.viewDidLoad()
         self.view.addSubview(navigationBar)
         self.view.addSubview(toolbar)
-        print("margins \(self.navigationBar.contentViewMargins)")
-        navigationBar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        navigationBar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        navBarLeadingConstraint.isActive = true
+        toolbarLeadingConstraint.isActive = true
+        navigationBar.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         navigationBar.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         
-        toolbar.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        toolbar.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        toolbar.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
         toolbar.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
         
     }
@@ -127,8 +142,17 @@ open class GLXMacNavigationController: NSViewController {
     
     func setupConstraintsForChildViewController(_ viewController:NSViewController) ->NSLayoutConstraint {
         viewController.view.translatesAutoresizingMaskIntoConstraints = false
-        viewController.view.topAnchor.constraint(equalTo: navigationBar.bottomAnchor).isActive = true
-        viewController.view.bottomAnchor.constraint(equalTo: toolbar.topAnchor).isActive = true
+        let topC = viewController.view.topAnchor.constraint(equalTo: self.view.topAnchor)
+        if !viewController.hidesTopBarWhenPushed {
+            topC.constant = navigationBarHeight
+        }
+        topC.isActive = true
+        
+        let bottomC = viewController.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        if !viewController.hidesBottomBarWhenPushed {
+            bottomC.constant = -toolbarHeight
+        }
+        bottomC.isActive = true
         let leading = viewController.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor)
         leading.isActive = true
         let width = viewController.view.widthAnchor.constraint(equalTo: self.view.widthAnchor)
@@ -149,6 +173,26 @@ open class GLXMacNavigationController: NSViewController {
     open func pushViewController(_ viewController:NSViewController, animated:Bool) {
         if let currentViewController = self.topViewController {
             self.currentNavigationAction = .pushing
+            let shouldAnimateNavBar = viewController.hidesTopBarWhenPushed != currentViewController.hidesTopBarWhenPushed
+            if shouldAnimateNavBar {
+                if viewController.hidesTopBarWhenPushed {
+                    
+                }
+                else {
+                    self.navBarHeightConstraint?.constant = navigationBarHeight
+                    self.navBarLeadingConstraint.constant = self.view.frame.size.width
+                }
+            }
+            let shouldAnimateToolbar = viewController.hidesBottomBarWhenPushed != currentViewController.hidesBottomBarWhenPushed
+            if shouldAnimateToolbar {
+                if viewController.hidesBottomBarWhenPushed {
+                    
+                }
+                else {
+                    self.toolbarHeightConstraint?.constant = toolbarHeight
+                    self.toolbarLeadingConstraint.constant = self.view.frame.size.width
+                }
+            }
             if !self.childViewControllers.contains(viewController) {
                 self.addViewController(viewController)
             }
@@ -163,17 +207,21 @@ open class GLXMacNavigationController: NSViewController {
                 else {
                     context.duration = 0
                 }
-                if viewController.hidesTopBarWhenPushed {
-                    self.navBarHeightConstraint?.animator().constant = 0
+                if shouldAnimateNavBar {
+                    if viewController.hidesTopBarWhenPushed {
+                        self.navBarLeadingConstraint.animator().constant = -self.view.frame.size.width
+                    }
+                    else {
+                        self.navBarLeadingConstraint.animator().constant = 0
+                    }
                 }
-                else {
-                    self.navBarHeightConstraint?.animator().constant = 44
-                }
-                if viewController.hidesBottomBarWhenPushed {
-                    self.toolbarHeightConstraint?.animator().constant = 0
-                }
-                else {
-                    self.toolbarHeightConstraint?.animator().constant = 44
+                if shouldAnimateToolbar {
+                    if viewController.hidesBottomBarWhenPushed {
+                        self.toolbarLeadingConstraint.animator().constant = -self.view.frame.size.width
+                    }
+                    else {
+                        self.toolbarLeadingConstraint.animator().constant = 0
+                    }
                 }
                 constraints.animator().constant = 0
                 previousConstraints.animator().constant = -self.view.frame.size.width/3
@@ -182,11 +230,35 @@ open class GLXMacNavigationController: NSViewController {
                     currentViewController.removeFromParentViewController()
                     currentViewController.view.removeFromSuperview()
                     self.currentNavigationAction = .none
+                    if viewController.hidesTopBarWhenPushed {
+                        self.navBarLeadingConstraint.constant = 0
+                        self.navBarHeightConstraint?.constant = 0
+                    }
+                    if viewController.hidesBottomBarWhenPushed {
+                        self.toolbarLeadingConstraint.constant = 0
+                        self.toolbarHeightConstraint?.constant = 0
+                    }
                 }
             })
         }
         else {
             self.addViewController(viewController)
+            self.navBarLeadingConstraint.constant = 0
+            if viewController.hidesTopBarWhenPushed {
+                self.navBarHeightConstraint?.constant = 0
+                
+            }
+            else {
+                self.navBarHeightConstraint?.constant = navigationBarHeight
+            }
+            self.toolbarLeadingConstraint.constant = 0
+            if viewController.hidesBottomBarWhenPushed {
+                self.toolbarHeightConstraint?.constant = 0
+                
+            }
+            else {
+                self.toolbarHeightConstraint?.constant = toolbarHeight
+            }
         }
     }
     
@@ -195,6 +267,26 @@ open class GLXMacNavigationController: NSViewController {
             self.currentNavigationAction = .popping
             let currentViewController = self.topViewController!
             let viewController = self.viewControllers[self.viewControllers.count-2]
+            let shouldAnimateNavBar = viewController.hidesTopBarWhenPushed != currentViewController.hidesTopBarWhenPushed
+            if shouldAnimateNavBar {
+                if viewController.hidesTopBarWhenPushed {
+                    
+                }
+                else {
+                    self.navBarHeightConstraint?.constant = navigationBarHeight
+                    self.navBarLeadingConstraint.constant = -self.view.frame.size.width
+                }
+            }
+            let shouldAnimateToolbar = viewController.hidesBottomBarWhenPushed != currentViewController.hidesBottomBarWhenPushed
+            if shouldAnimateToolbar {
+                if viewController.hidesBottomBarWhenPushed {
+                    
+                }
+                else {
+                    self.toolbarHeightConstraint?.constant = toolbarHeight
+                    self.toolbarLeadingConstraint.constant = -self.view.frame.size.width
+                }
+            }
             if !self.childViewControllers.contains(viewController) {
                 self.insertChildViewController(viewController, at: self.childViewControllers.index(of: currentViewController)!)
                 self.view.addSubview(viewController.view, positioned: .below, relativeTo: currentViewController.view)
@@ -210,17 +302,21 @@ open class GLXMacNavigationController: NSViewController {
                 else {
                     context.duration = 0
                 }
-                if viewController.hidesTopBarWhenPushed {
-                    self.navBarHeightConstraint?.animator().constant = 0
+                if shouldAnimateNavBar {
+                    if viewController.hidesTopBarWhenPushed {
+                        self.navBarLeadingConstraint.animator().constant = self.view.frame.size.width
+                    }
+                    else {
+                        self.navBarLeadingConstraint.animator().constant = 0
+                    }
                 }
-                else {
-                    self.navBarHeightConstraint?.animator().constant = 44
-                }
-                if viewController.hidesBottomBarWhenPushed {
-                    self.toolbarHeightConstraint?.animator().constant = 0
-                }
-                else {
-                    self.toolbarHeightConstraint?.animator().constant = 44
+                if shouldAnimateToolbar {
+                    if viewController.hidesBottomBarWhenPushed {
+                        self.toolbarLeadingConstraint.animator().constant = self.view.frame.size.width
+                    }
+                    else {
+                        self.toolbarLeadingConstraint.animator().constant = 0
+                    }
                 }
                 previousConstraints.animator().constant = 0
                 //viewController.view.animator().constant = 0
@@ -230,6 +326,14 @@ open class GLXMacNavigationController: NSViewController {
                     currentViewController.removeFromParentViewController()
                     currentViewController.view.removeFromSuperview()
                     self.currentNavigationAction = .none
+                    if viewController.hidesTopBarWhenPushed {
+                        self.navBarLeadingConstraint.constant = 0
+                        self.navBarHeightConstraint?.constant = 0
+                    }
+                    if viewController.hidesBottomBarWhenPushed {
+                        self.toolbarLeadingConstraint.constant = 0
+                        self.toolbarHeightConstraint?.constant = 0
+                    }
                 }
             })
             viewControllers.removeLast()
