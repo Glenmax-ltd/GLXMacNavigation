@@ -38,7 +38,7 @@ open class GLXMacBarButtonItem:FlatButton {
         }
     }
     
-    convenience init(title:String,target:AnyObject?,selector:Selector?) {
+    public convenience init(title:String,target:AnyObject?,selector:Selector?) {
         self.init(frame: NSRect.zero)
         self.target = target
         self.action = selector
@@ -50,7 +50,7 @@ open class GLXMacBarButtonItem:FlatButton {
         self.updateTint()
     }
     
-    convenience init(image:NSImage,target:AnyObject?,selector:Selector?) {
+    public convenience init(image:NSImage,target:AnyObject?,selector:Selector?) {
         self.init(frame: NSRect.zero)
         self.target = target
         self.action = selector
