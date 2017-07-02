@@ -15,6 +15,8 @@ open class GLXMacToolbar:NSBox {
     
     func setItems(_ items:[GLXMacBarButtonItem], animated:Bool) {
         var previousView:NSView = self
+        let previousItems = toolbarItems
+        toolbarItems = items
         var flexSpaceViews:[GLXMacBarButtonItemFlexibleSpace] = []
         for item in items {
             item.alphaValue = 0
@@ -58,14 +60,13 @@ open class GLXMacToolbar:NSBox {
                     item.animator().alphaValue = 1.0
                 }
             }
-            for item in self.toolbarItems {
+            for item in previousItems {
                 item.animator().alphaValue = 0.0
             }
         }, completionHandler: {
-            for item in self.toolbarItems {
+            for item in previousItems {
                 item.removeFromSuperview()
             }
-            self.toolbarItems = items
         })
     }
     
