@@ -13,6 +13,17 @@ open class GLXMacNavigationBar:NSBox {
     
     var leftBarButtonItem:GLXMacBarButtonItem?
     var rightBarButtonItem:GLXMacBarButtonItem?
+    var navBarTitle:NSTextField?
+    
+    open var tintColor:NSColor? {
+        didSet {
+            for item in self.items {
+                item.leftBarButtonItem?.updateTint()
+                item.rightBarButtonItem?.updateTint()
+                item.titleLabel.textColor = tintColor
+            }
+        }
+    }
     
     open var items:[GLXMacNavigationItem] = []
     
@@ -55,11 +66,14 @@ open class GLXMacNavigationBar:NSBox {
             }
             top?.leftBarButtonItem?.animator().alphaValue = 1
             top?.rightBarButtonItem?.animator().alphaValue = 1
+            top?.titleLabel.animator().alphaValue = 1
             back?.leftBarButtonItem?.animator().alphaValue = 0
             back?.rightBarButtonItem?.animator().alphaValue = 0
+            back?.titleLabel.animator().alphaValue = 0
         }, completionHandler: {
             back?.leftBarButtonItem?.removeFromSuperview()
             back?.rightBarButtonItem?.removeFromSuperview()
+            back?.titleLabel.removeFromSuperview()
         })
     }
     
@@ -88,11 +102,14 @@ open class GLXMacNavigationBar:NSBox {
             }
             top?.leftBarButtonItem?.animator().alphaValue = 0
             top?.rightBarButtonItem?.animator().alphaValue = 0
+            top?.titleLabel.animator().alphaValue = 0
             back?.leftBarButtonItem?.animator().alphaValue = 1
             back?.rightBarButtonItem?.animator().alphaValue = 1
+            back?.titleLabel.animator().alphaValue = 1
         }, completionHandler: {
             top?.leftBarButtonItem?.removeFromSuperview()
             top?.rightBarButtonItem?.removeFromSuperview()
+            top?.titleLabel.removeFromSuperview()
         })
         self.items.removeLast()
     }
@@ -118,6 +135,16 @@ open class GLXMacNavigationBar:NSBox {
                 right.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -15).isActive = true
             }
             rightBarButtonItem = item.rightBarButtonItem
+        }
+    }
+    
+    func updateTitle(forItem item:GLXMacNavigationItem) {
+        if item == self.topItem {
+            navBarTitle?.removeFromSuperview()
+            self.addSubview(item.titleLabel)
+            item.titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+            item.titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+            navBarTitle = item.titleLabel
         }
     }
     

@@ -93,6 +93,16 @@ open class GLXMacBarButtonItem:FlatButton {
             self.activeIconColor = textColor.withAlphaComponent(0.5)
             self.activeTextColor = textColor.withAlphaComponent(0.5)
         }
+        else if let navBar = superview as? GLXMacNavigationBar {
+            if let textColor = navBar.tintColor
+            {
+                self.iconColor = textColor
+                self.textColor = textColor
+                
+                self.activeIconColor = textColor.withAlphaComponent(0.5)
+                self.activeTextColor = textColor.withAlphaComponent(0.5)
+            }
+        }
     }
     
     override open func draw(_ dirtyRect: NSRect) {
