@@ -295,6 +295,7 @@ open class GLXMacNavigationController: NSViewController {
             let constraints = navigationConstraints.last!
             let previousConstraints = navigationConstraints[navigationConstraints.count-2]
             previousConstraints.constant = -self.view.frame.size.width/3
+            self.toolbar.setItems(self.toolbarItems[self.viewControllers.count-2], animated: true)
             NSAnimationContext.runAnimationGroup({ (context) in
                 if animated {
                     context.duration = 0.5
