@@ -27,7 +27,6 @@ open class GLXMacNavigationController: NSViewController {
         view.borderType = .noBorder
         view.cornerRadius = 0.0
         view.borderWidth = 0.0
-        view.fillColor = NSColor.red
         view.title = ""
         view.contentViewMargins = NSMakeSize(0,0)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -64,7 +63,6 @@ open class GLXMacNavigationController: NSViewController {
         view.borderType = .noBorder
         view.cornerRadius = 0.0
         view.borderWidth = 0.0
-        view.fillColor = NSColor.red
         view.title = ""
         view.contentViewMargins = NSMakeSize(0,0)
         view.translatesAutoresizingMaskIntoConstraints = false
