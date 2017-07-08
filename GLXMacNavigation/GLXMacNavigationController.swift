@@ -359,6 +359,42 @@ open class GLXMacNavigationController: NSViewController {
             }
         }
     }
+    
+    open func setViewControllers(_ controllers:[NSViewController], animated:Bool) {
+        
+        if let currentViewController = self.topViewController {
+            currentViewController.removeFromParentViewController()
+            currentViewController.view.removeFromSuperview()
+        }
+        
+        for i in 0..<(controllers.count - 1) {
+            let viewC = controllers[i]
+            let item = GLXMacNavigationItem(navController: self)
+            self.navigationBar.pushItem(item, animated: false)
+            self.toolbarItems.append([])
+            viewControllers.append(viewC)
+        }
+        
+        let viewController = controllers.last!
+        self.addViewController(viewController)
+        self.navBarLeadingConstraint.constant = 0
+        if viewController.hidesTopBarWhenPushed {
+            self.navBarHeightConstraint?.constant = 0
+            
+        }
+        else {
+            self.navBarHeightConstraint?.constant = navigationBarHeight
+        }
+        self.toolbarLeadingConstraint.constant = 0
+        if viewController.hidesBottomBarWhenPushed {
+            self.toolbarHeightConstraint?.constant = 0
+            
+        }
+        else {
+            self.toolbarHeightConstraint?.constant = toolbarHeight
+        }
+        
+    }
 
 }
 
